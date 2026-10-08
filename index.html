@@ -522,9 +522,9 @@ a{color:inherit}
     </a>
     <p class="final__cats">
       <span>Или сразу в раздел:</span>
-      <a href="https://gorbilet.ru/msk/catalog/spektakli-v-moskve/komedii/?utm_source=vk&amp;utm_medium=rassilka_msk&amp;utm_campaign=lead_spektakl&amp;utm_content=%D0%9A%D0%BE%D0%BC%D0%B5%D0%B4%D0%B8%D0%B8" target="_blank" rel="noopener">Комедии</a>
-      <a href="https://gorbilet.ru/msk/catalog/spektakli-v-moskve/dramy/?utm_source=vk&amp;utm_medium=rassilka_msk&amp;utm_campaign=lead_spektakl&amp;utm_content=%D0%94%D1%80%D0%B0%D0%BC%D1%8B" target="_blank" rel="noopener">Драмы</a>
-      <a href="https://gorbilet.ru/msk/catalog/spektakli-v-moskve/muzykalnye-spektakli/?utm_source=vk&amp;utm_medium=rassilka_msk&amp;utm_campaign=lead_spektakl&amp;utm_content=%D0%9C%D1%83%D0%B7%D1%8B%D0%BA%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%B5%20%D1%81%D0%BF%D0%B5%D0%BA%D1%82%D0%B0%D0%BA%D0%BB%D0%B8" target="_blank" rel="noopener">Музыкальные спектакли</a>
+      <a href="https://gorbilet.ru/msk/catalog/spektakli-v-moskve/komedii/?utm_source=vk&amp;utm_medium=rassilka_msk&amp;utm_campaign=lead_spektakl&amp;utm_content=komedii" target="_blank" rel="noopener">Комедии</a>
+      <a href="https://gorbilet.ru/msk/catalog/spektakli-v-moskve/dramy/?utm_source=vk&amp;utm_medium=rassilka_msk&amp;utm_campaign=lead_spektakl&amp;utm_content=dramy" target="_blank" rel="noopener">Драмы</a>
+      <a href="https://gorbilet.ru/msk/catalog/spektakli-v-moskve/muzykalnye-spektakli/?utm_source=vk&amp;utm_medium=rassilka_msk&amp;utm_campaign=lead_spektakl&amp;utm_content=muzykalnye-spektakli" target="_blank" rel="noopener">Музыкальные спектакли</a>
     </p>
   </div>
 </section>
@@ -729,13 +729,22 @@ a{color:inherit}
   /* Append tracking without reserializing the source URL: preserve every
      original query parameter and put any fragment after the UTM parameters. */
   function withUTM(url, content) {
+    // Use readable Latin transliteration for analytics; visible titles stay Russian.
+    var letters = {
+      'а':'a','б':'b','в':'v','г':'g','д':'d','е':'e','ё':'yo','ж':'zh','з':'z','и':'i','й':'y',
+      'к':'k','л':'l','м':'m','н':'n','о':'o','п':'p','р':'r','с':'s','т':'t','у':'u','ф':'f',
+      'х':'kh','ц':'ts','ч':'ch','ш':'sh','щ':'shch','ъ':'','ы':'y','ь':'','э':'e','ю':'yu','я':'ya'
+    };
+    var latinContent = String(content).toLowerCase().replace(/[а-яё]/g, function (letter) {
+      return letters[letter];
+    }).replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
     var hashIndex = url.indexOf('#');
     var base = hashIndex === -1 ? url : url.slice(0, hashIndex);
     var hash = hashIndex === -1 ? '' : url.slice(hashIndex);
     var separator = base.indexOf('?') === -1 ? '?' : /[?&]$/.test(base) ? '' : '&';
     return base + separator +
       'utm_source=vk&utm_medium=rassilka_msk&utm_campaign=lead_spektakl&utm_content=' +
-      encodeURIComponent(content) + hash;
+      latinContent + hash;
   }
 
   function plural(n, f) {
